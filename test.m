@@ -37,10 +37,7 @@ hue_mask = imresize(hue_mask, 2);
 hue_mask = 1- hue_mask;
 hue_mask(hue_mask<1) = 0;
 
-
 gray = rgb2gray(eve);
-
-
 
 med = medfilt2(gray, [3, 3]);
 
@@ -48,7 +45,6 @@ avgFilter = fspecial('average', 3);
 avg = imfilter(med, avgFilter);
 
 % mea = imfilter(gray, meanFilter);
-
 
 % can = edge(gray,'Canny');
 % 
@@ -195,8 +191,33 @@ for i=1:H
     end
 end
 
+
+
 sob_left = sob .* left_mask;
 sob_right = sob .* right_mask;
+
+
+L = bwconncomp(sob_left);
+S = regionprops(L, 'Area');
+Ss = [];
+for i=1:length(S)
+    s = S(i).Area;
+    Ss = [Ss s];
+end
+s = mean(Ss);
+idx = find([S.Area] > s);
+sob_left = ismember(labelmatrix(L),idx);
+
+L = bwconncomp(sob_right);
+S = regionprops(L, 'Area');
+Ss = [];
+for i=1:length(S)
+    s = S(i).Area;
+    Ss = [Ss s];
+end
+s = mean(Ss);
+idx = find([S.Area] > s);
+sob_right = ismember(labelmatrix(L),idx);
 
 left_X = [];
 left_Y = [];
@@ -214,13 +235,16 @@ for i=1:H
         end
     end
 end
-plot(left_X, left_Y);
+% plot(left_X,r left_Y);
 % plot(right_X, right_Y);
 
-coefficient=polyfit(left_X,left_Y,3);
-left_Y2=polyval(coefficient,left_X);
-
+coefficient = polyfit(left_X,left_Y,1);
+left_Y2 = polyval(coefficient,left_X);
 plot(left_X, left_Y2);
+
+coefficient = polyfit(right_X,right_Y,1);
+right_Y2 = polyval(coefficient,right_X);
+plot(right_X, right_Y2);
 
 % % eps = 0.000001;
 % % I_log = I_filt;
