@@ -1,7 +1,7 @@
 clc;
 clear;
 
-rgb = imread('Data/5.JPG');
+rgb = imread('Data/4.JPG');
 
 eve = even_light(rgb);
 % eve = rgb;
@@ -75,7 +75,7 @@ sob = sqrt(X.^2 + Y.^2);
 
 % sob = edge(med,'sobel');
 
-gausFilter = fspecial('gaussian', [5,5], 3);
+gausFilter = fspecial('gaussian', [3,3], 1);
 sob = imfilter(double(sob), gausFilter);
 
 % sob = double(sob);
@@ -238,13 +238,17 @@ end
 % plot(left_X,r left_Y);
 % plot(right_X, right_Y);
 
-coefficient = polyfit(left_X,left_Y,1);
-left_Y2 = polyval(coefficient,left_X);
-plot(left_X, left_Y2);
+show = sob_left + gray + sob_right;
 
-coefficient = polyfit(right_X,right_Y,1);
-right_Y2 = polyval(coefficient,right_X);
-plot(right_X, right_Y2);
+% coefficient = polyfit(left_X,left_Y,3);
+% left_Y2 = polyval(coefficient,left_X);
+% plot(left_X, left_Y2);
+% 
+% hold on;
+% 
+% coefficient = polyfit(right_X,right_Y,3);
+% right_Y2 = polyval(coefficient,right_X);
+% plot(right_X, right_Y2);
 
 % % eps = 0.000001;
 % % I_log = I_filt;
